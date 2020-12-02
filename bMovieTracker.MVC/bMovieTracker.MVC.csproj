@@ -24,6 +24,7 @@
     <ProjectReference Include="..\bMovieTracker.App\bMovieTracker.App.csproj" />
     <ProjectReference Include="..\bMovieTracker.Data\bMovieTracker.Data.csproj" />
     <ProjectReference Include="..\bMovieTracker.Domain\bMovieTracker.Domain.csproj" />
+    <ProjectReference Include="..\bMovieTracker.Identity\bMovieTracker.Identity.csproj" />
   </ItemGroup>
 
 </Project>

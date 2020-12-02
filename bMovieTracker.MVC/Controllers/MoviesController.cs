@@ -3,9 +3,12 @@ using bMovieTracker.App;
 using System.Threading.Tasks;
 using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace bMovieTracker.MVC.Controllers
 {
+    [Authorize]
     public class MoviesController : Controller
     {
         private readonly IMovieTrackerService _movieService;
@@ -20,6 +23,7 @@ namespace bMovieTracker.MVC.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var movies = await _movieService.GetAllMovies();
                 return View("MoviesList", movies);
             }

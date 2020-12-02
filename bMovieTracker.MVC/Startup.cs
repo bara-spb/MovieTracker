@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using bMovieTracker.MVC.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using bMovieTracker.Data.Configuration;
@@ -13,6 +9,7 @@ using bMovieTracker.App.Configuration;
 using AutoMapper;
 using bMovieTracker.App;
 using bMovieTracker.Api.Infrastructure;
+using bMovieTracker.Identity.Configuration;
 
 namespace bMovieTracker.MVC
 {
@@ -33,22 +30,16 @@ namespace bMovieTracker.MVC
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.ConfigureMovieTrackerIdentity(Configuration.GetConnectionString("usersDB"));
+            services.ConfigureMovieTrackerData(Configuration.GetConnectionString("moviesDB"));
+            services.AddAutoMapper(typeof(MovieMappingProfile));
+            services.AddTransient<IMovieTrackerService, MovieTrackerService>();
 
             services.AddMvc(
                 options => options.ModelBinderProviders.Insert(0, new MovieModelBinderProvider())                
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-
-            var connetionString = Configuration.GetConnectionString("local");
-            services.ConfigureMovieTrackerData(connetionString);
-            services.AddAutoMapper(typeof(MovieMappingProfile));
-            services.AddTransient<IMovieTrackerService, MovieTrackerService>();
+            services.AddAuthentication();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
