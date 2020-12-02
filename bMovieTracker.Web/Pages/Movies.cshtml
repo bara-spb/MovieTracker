@@ -1,0 +1,14 @@
+﻿@page
+@model bMovieTracker.Web.Pages.MoviesModel
+@{
+    ViewData["Title"] = "Movies";
+}
+
+<h1>Movies</h1>
+
+<ul>
+@foreach(var movie in await Model.GetAllMovies())
+{
+    <li>@movie.Title</li>
+}
+</ul>
