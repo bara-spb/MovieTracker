@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using bMovieTracker.Identity;
 
 namespace bMovieTracker.MVC.Controllers
 {
@@ -13,18 +13,20 @@ namespace bMovieTracker.MVC.Controllers
     {
         private readonly IMovieTrackerService _movieService;
         private readonly IMapper _mapper;
-        public MoviesController(IMovieTrackerService movieService, IMapper mapper)
+        private readonly MovieTrackerUserManager _userManager;
+        public MoviesController(IMovieTrackerService movieService, IMapper mapper, MovieTrackerUserManager userManager)
         {
             _movieService = movieService;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var movies = await _movieService.GetAllMovies();
+                var userId = _userManager.GetUserId(User);
+                var movies = await _movieService.GetAllMovies(userId);
                 return View("MoviesList", movies);
             }
             catch (Exception ex)
@@ -44,11 +46,12 @@ namespace bMovieTracker.MVC.Controllers
             {
                 if (movieVM != null)
                 {
-                    await _movieService.CreateMovie(movieVM);
+                    var userId = _userManager.GetUserId(User);
+                    await _movieService.CreateMovie(userId, movieVM);
                     return RedirectToAction("Index");
                 }
                 else
-                    return View("Error", "Home");
+                    return View("Error", "Didn't manage to create the movie");
             }
             catch (Exception ex)
             {
@@ -65,11 +68,13 @@ namespace bMovieTracker.MVC.Controllers
         {
             try
             {
-                if (movieVM != null) {
-                    if (await _movieService.UpdateMovie(movieVM))
+                if (movieVM != null)
+                {
+                    var userId = _userManager.GetUserId(User);
+                    if (await _movieService.UpdateMovie(userId, movieVM))
                         return RedirectToAction("Index");
                 }
-                return View("Error", "Didn't mange to update the movie");
+                return View("Error", "Didn't manage to update the movie");
             }
             catch (Exception ex)
             {
@@ -81,10 +86,11 @@ namespace bMovieTracker.MVC.Controllers
         {
             try
             {
-                if (await _movieService.DeleteMovie(id))
+                var userId = _userManager.GetUserId(User);
+                if (await _movieService.DeleteMovie(userId, id))
                     return RedirectToAction("Index");
                 else
-                    return View("Error", "Didn't mange to delete the movie");
+                    return View("Error", "Didn't manage to delete the movie");
             }
             catch (Exception ex)
             {

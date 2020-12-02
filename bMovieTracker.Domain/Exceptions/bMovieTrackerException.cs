@@ -2,7 +2,7 @@
 
 namespace bMovieTracker.Domain
 {
-    class bMovieTrackerException : Exception
+    public class bMovieTrackerException : Exception
     {
         public bMovieTrackerException(string message) : this(message, null) { }
 

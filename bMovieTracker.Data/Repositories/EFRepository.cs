@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using bMovieTracker.Domain;
 using bMovieTracker.App;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace bMovieTracker.Data
 {
@@ -19,6 +20,11 @@ namespace bMovieTracker.Data
         public virtual async Task<T> GetById(int id, CancellationToken ct = default(CancellationToken))
         {
             return await _dbContext.Set<T>().FindAsync(id);
+        }
+
+        public IQueryable<T> GetAllAsQueryable()
+        {
+            return _dbContext.Set<T>();
         }
 
         public virtual async Task<IReadOnlyList<T>> GetAll(CancellationToken ct = default(CancellationToken))

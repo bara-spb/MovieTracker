@@ -12,7 +12,7 @@ namespace bMovieTracker.Data.Configuration
             services.AddEntityFrameworkSqlServer();
             services.AddDbContextPool<MovieTrackerDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            services.AddTransient<IRepository<Movie>, EFRepository<Movie>>();
+            services.AddTransient<IMoviesRepository, MoviesRepository>();
             return services;
         }
     }
