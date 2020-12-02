@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bMovieTracker.Api", "bMovie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bMovieTracker.App", "bMovieTracker.App\bMovieTracker.App.csproj", "{5927C268-3380-49DA-ADEF-D664B8349F7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bMovieTracker.Web", "bMovieTracker.Web\bMovieTracker.Web.csproj", "{9DBA5647-D68F-4654-B502-5106C4F7E7A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bMovieTracker.MVC", "bMovieTracker.MVC\bMovieTracker.MVC.csproj", "{8B1AFD53-17D5-4D15-B847-C08BB04ECDC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{5927C268-3380-49DA-ADEF-D664B8349F7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5927C268-3380-49DA-ADEF-D664B8349F7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5927C268-3380-49DA-ADEF-D664B8349F7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9DBA5647-D68F-4654-B502-5106C4F7E7A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DBA5647-D68F-4654-B502-5106C4F7E7A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DBA5647-D68F-4654-B502-5106C4F7E7A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DBA5647-D68F-4654-B502-5106C4F7E7A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1AFD53-17D5-4D15-B847-C08BB04ECDC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1AFD53-17D5-4D15-B847-C08BB04ECDC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1AFD53-17D5-4D15-B847-C08BB04ECDC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1AFD53-17D5-4D15-B847-C08BB04ECDC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

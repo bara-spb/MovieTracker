@@ -1,10 +1,11 @@
 ﻿
 
+using System.Runtime.Serialization;
+
 namespace bMovieTracker.Domain
 {
     public enum GenreTypes
     {
-        Undefined,
         Action,
         Adventure,
         Animation,

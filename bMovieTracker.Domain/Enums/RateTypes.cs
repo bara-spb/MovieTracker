@@ -4,7 +4,6 @@ namespace bMovieTracker.Domain
 {
     public enum RateTypes
     {
-        Undefined,
         [EnumMember(Value = "One Star")]
         OneStar,
         [EnumMember(Value = "Two Stars")]

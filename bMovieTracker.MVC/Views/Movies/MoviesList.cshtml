@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MovieVM>
+@{
+    ViewData["Title"] = "Movies";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Movies</h1>
+</div>
+
+<p>
+    @Html.ActionLink("Add movie", "StartCreating", new { controller = "Movies" }, new { @class = "btn btn-primary active" })
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Genre</th>
+            <th>Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Edit", "StartEditing", movie)
+                    @Html.ActionLink("Delete", "Delete", movie)
+                </td>
+                <td>@movie.Title</td>
+                <td>@movie.Year</td>
+                <td>@movie.Genre</td>
+                <td>@movie.Rate</td>
+            </tr>
+        }
+    </tbody>
+</table>

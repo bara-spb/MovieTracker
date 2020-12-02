@@ -68,20 +68,19 @@ namespace bMovieTracker.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, MovieVM movieViewModel)
+        public async Task<IActionResult> Put(int id, MovieVM movieVM)
         {
             try
             {
-                if (movieViewModel == null)
+                if (movieVM == null)
                     return BadRequest();
 
                 if (await _movieService.GetMovieById(id) == null)
                     return NotFound();
 
-                var movieVM = _mapper.Map<MovieVM>(movieViewModel);
                 movieVM.Id = id;
                 if (await _movieService.UpdateMovie(movieVM))
-                    return Ok(movieViewModel);
+                    return Ok(movieVM);
 
                 return StatusCode(500);
             }
