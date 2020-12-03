@@ -1,4 +1,5 @@
 ﻿using bMovieTracker.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace bMovieTracker.Api.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -22,11 +24,24 @@ namespace bMovieTracker.Api.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
-        {
-            return new ContentResult() { Content = "account controller" };
-        }
-
+        /// <summary>
+        /// Login user to system
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST
+        ///     {
+        ///        "username": "myUsername",
+        ///        "password": "myPassword"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="username">User's email</param>  
+        /// <param name="password">User's password</param>  
+        /// <response code="200">JWT token to authentificate</response>
+        /// <response code="400">Please, specify username and password</response>
+        /// <response code="401">No account with this username/password combination was found</response> 
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
@@ -38,9 +53,27 @@ namespace bMovieTracker.Api.Controllers
             {
                 return new JsonResult(CreateToken(user));
             }
-            return BadRequest("No account with this username/password combination was found");
-        }
+            return StatusCode(StatusCodes.Status401Unauthorized, new { message = "No account with this username/password combination was found" });
+            }
 
+        /// <summary>
+        /// Register new user
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST
+        ///     {
+        ///        "email": "myEmail",
+        ///        "password": "myPassword"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="email">User's email</param>  
+        /// <param name="password">User's password</param>  
+        /// <response code="200">JWT token to authentificate</response>
+        /// <response code="400">Please, specify email and password</response>
+        /// <response code="500">This Email is already registered</response> 
         [HttpPost]
         public async Task<IActionResult> Register(string email, string password)
         {
@@ -49,7 +82,7 @@ namespace bMovieTracker.Api.Controllers
 
             var user = await _userManager.FindByNameAsync(email);
             if (user != null)
-                return BadRequest("This Email is already registered");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "This Email is already registered" });
 
             var newUser = new MovieTrackerUser() {
                 UserName = email,
