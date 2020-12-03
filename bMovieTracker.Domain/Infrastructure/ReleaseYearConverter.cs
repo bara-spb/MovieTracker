@@ -1,14 +1,10 @@
-﻿using bMovieTracker.Domain;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace bMovieTracker.Domain
 {
-    public class MovieModelConverter: TypeConverter
+    public class ReleaseYearConverter: TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {

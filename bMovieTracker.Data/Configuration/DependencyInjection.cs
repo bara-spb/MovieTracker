@@ -1,5 +1,4 @@
 ﻿using bMovieTracker.App;
-using bMovieTracker.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

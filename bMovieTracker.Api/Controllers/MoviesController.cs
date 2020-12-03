@@ -77,7 +77,7 @@ namespace bMovieTracker.Api.Controllers
 
                 var newMovie = await _movieService.CreateMovie((int)userId, movieVM);
                 if (newMovie != null)
-                    return StatusCode(201);
+                    return Ok(newMovie);
 
                 return StatusCode(500, "Didn't manage to create the movie");
             }

@@ -69,7 +69,7 @@ namespace bMovieTracker.App
         private async Task<bool> IsOwner(int userId, int movieId)
         {
             var movie = await _movieRep.GetById(movieId);
-            return movie.UserId == userId;
+            return movie?.UserId == userId;
         }
     }
 }

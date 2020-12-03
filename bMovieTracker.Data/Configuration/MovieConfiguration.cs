@@ -1,7 +1,6 @@
 ﻿using bMovieTracker.Domain;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Linq;
 
 namespace bMovieTracker.Data.Configurations
 {
@@ -20,7 +19,6 @@ namespace bMovieTracker.Data.Configurations
             entity.Property(e => e.Genre)
                 .HasConversion(
                     v => v.ToString(),
-                    //v => v != null && !string.IsNullOrEmpty(v) && v.All(Char.IsDigit) && Enum.IsDefined(typeof(GenreTypes), int.Parse(v)) ? (GenreTypes?) int.Parse(v) : null);
                     v => v != null && Enum.IsDefined(typeof(GenreTypes), v.ToString()) ? (GenreTypes?) Enum.Parse(typeof(GenreTypes), v) : null);
             entity.Property(e => e.Rate)
                 .HasConversion(
