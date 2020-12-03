@@ -10,19 +10,21 @@
 <form id="createForm" asp-action="Create" asp-controller="Movies" asp-antiforgery="true">
     <table>
         <tr>
-            <td>Title:</td>
+            <td><label asp-for="Title"></label></td>
             <td>
                 @Html.EditorFor(modelItem => Model.Title)
+                <span asp-validation-for="Title" class="text-danger"></span>
             </td>
         </tr>
         <tr>
-            <td>Year:</td>
+            <td><label asp-for="Year"></label></td>
             <td>
                 @Html.TextBoxFor(i => i.Year, new { @type = "number" })
+                <span asp-validation-for="Year" class="text-danger"></span>
             </td>
         </tr>
         <tr>
-            <td>Genre:</td>
+            <td><label asp-for="Genre"></label></td>
             <td>
                 <select asp-for="Genre" asp-items="Html.GetEnumSelectList<GenreTypes>()">
                     <option selected="" value="" />
@@ -30,7 +32,7 @@
             </td>
         </tr>
         <tr>
-            <td>Rate:</td>
+            <td><label asp-for="Rate"></label></td>
             <td>
                 <select asp-for="Rate" asp-items="Html.GetEnumSelectList<RateTypes>()">
                     <option selected="" value="" />
@@ -38,8 +40,15 @@
             </td>
         </tr>
         <tr>
-            <td><input type="submit" value="Create" class="btn btn-primary active bottom-buttons"/></td>
-            <td>@Html.ActionLink("Cancel", "Index", new { controller = "Movies" }, new { @class = "btn btn-secondary bottom-buttons" } )</td>
+            <td><input type="submit" value="Create" class="btn btn-primary active bottom-buttons" /></td>
+            <td>@Html.ActionLink("Cancel", "Index", new { controller = "Movies" }, new { @class = "btn btn-secondary bottom-buttons" })</td>
         </tr>
+
     </table>
 </form>
+
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -8,7 +8,6 @@ using bMovieTracker.Data.Configuration;
 using bMovieTracker.App.Configuration;
 using AutoMapper;
 using bMovieTracker.App;
-using bMovieTracker.Api.Infrastructure;
 using bMovieTracker.Identity.Configuration;
 
 namespace bMovieTracker.MVC
@@ -35,9 +34,7 @@ namespace bMovieTracker.MVC
             services.AddAutoMapper(typeof(MovieMappingProfile));
             services.AddTransient<IMovieTrackerService, MovieTrackerService>();
 
-            services.AddMvc(
-                options => options.ModelBinderProviders.Insert(0, new MovieModelBinderProvider())                
-            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAuthentication();
         }

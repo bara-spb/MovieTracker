@@ -42,6 +42,8 @@ namespace bMovieTracker.MVC.Controllers
 
         public async Task<IActionResult> Create(CreateMovieVM movieVM)
         {
+            if (!ModelState.IsValid)
+                return View(movieVM);
             try
             {
                 if (movieVM != null)
@@ -66,6 +68,8 @@ namespace bMovieTracker.MVC.Controllers
 
         public async Task<IActionResult> Edit(MovieVM movieVM)
         {
+            if (!ModelState.IsValid)
+                return View(movieVM);
             try
             {
                 if (movieVM != null)

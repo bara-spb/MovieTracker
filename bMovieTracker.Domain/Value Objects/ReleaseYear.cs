@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace bMovieTracker.Domain
 {
-    public class ReleaseYear
+    [TypeConverter(typeof(MovieModelConverter))]
+    public class ReleaseYear : IValidatableObject
     {
-        private static int MaxYearInFuture = 30;
+        public const int MinValue = 1900;
+        public const int MaxValue = 2050;
+        public const string ValidationMessage = "The year should be between 1900 and 2050";
 
         public int? Value { get; }
 
@@ -15,22 +21,25 @@ namespace bMovieTracker.Domain
             int yearInt;
             if (year != null && int.TryParse(year, out yearInt))
             {
-                Validate(yearInt);
                 Value = yearInt;
             }
         }
         public ReleaseYear(int? year)
         {
-            Validate(year);
             Value = year;
         }
 
-        private void Validate(int? year)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (year < 1900)
-                throw new bMovieTrackerException("ReleaseYear should be grater than 1900");
-            else if (year > DateTime.Now.Year + MaxYearInFuture)
-                throw new bMovieTrackerException($"ReleaseYear can't exceed current date for more than {MaxYearInFuture} years");
+            var errors = new List<ValidationResult>();
+            if (Value != null)
+            {
+                if (Value < MinValue)
+                    errors.Add(new ValidationResult($"ReleaseYear should be greater then {MinValue}"));
+                else if (Value > MaxValue)
+                    errors.Add(new ValidationResult($"ReleaseYear can't be greater then {MaxValue}"));
+            }
+            return errors;
         }
 
         public override string ToString() => Value?.ToString() ?? "Unknown";

@@ -1,11 +1,13 @@
 ﻿using bMovieTracker.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.ComponentModel.DataAnnotations;
 
 namespace bMovieTracker.App
 {
     public class CreateMovieVM
     {
+        [Required(ErrorMessage = "Title is required field")]
         public string Title { get; set; }
         public ReleaseYear Year { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
