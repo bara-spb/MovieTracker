@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using AutoMapper;
-using bMovieTracker.App;
 using bMovieTracker.Data.Configuration;
+using bMovieTracker.Identity.Configuration;
 
 namespace bMovieTracker.Api
 {
@@ -21,12 +20,11 @@ namespace bMovieTracker.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.ConfigureMovieTrackerIdentityForApi(Configuration.GetConnectionString("usersDB"));
+            services.ConfigureMovieTrackerData(Configuration.GetConnectionString("moviesDB"));
+            services.ConfigureMovieTrackerApp();
 
-            var connetionString = Configuration.GetConnectionString("local");
-            services.ConfigureMovieTrackerData(connetionString);
-            services.AddAutoMapper(typeof(MovieMappingProfile));
-            services.AddTransient<IMovieTrackerService, MovieTrackerService>();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -40,6 +38,7 @@ namespace bMovieTracker.Api
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

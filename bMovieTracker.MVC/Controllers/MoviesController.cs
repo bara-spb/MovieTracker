@@ -26,7 +26,9 @@ namespace bMovieTracker.MVC.Controllers
             try
             {
                 var userId = _userManager.GetUserId(User);
-                var movies = await _movieService.GetAllMovies(userId);
+                if (userId == null)
+                    return View("Error", "User not defined");
+                var movies = await _movieService.GetAllMovies((int) userId);
                 return View("MoviesList", movies);
             }
             catch (Exception ex)
@@ -49,7 +51,9 @@ namespace bMovieTracker.MVC.Controllers
                 if (movieVM != null)
                 {
                     var userId = _userManager.GetUserId(User);
-                    await _movieService.CreateMovie(userId, movieVM);
+                    if (userId == null)
+                        return View("Error", "User not defined");
+                    await _movieService.CreateMovie((int) userId, movieVM);
                     return RedirectToAction("Index");
                 }
                 else
@@ -75,7 +79,9 @@ namespace bMovieTracker.MVC.Controllers
                 if (movieVM != null)
                 {
                     var userId = _userManager.GetUserId(User);
-                    if (await _movieService.UpdateMovie(userId, movieVM))
+                    if (userId == null)
+                        return View("Error", "User not defined");
+                    if (await _movieService.UpdateMovie((int) userId, movieVM))
                         return RedirectToAction("Index");
                 }
                 return View("Error", "Didn't manage to update the movie");
@@ -91,7 +97,9 @@ namespace bMovieTracker.MVC.Controllers
             try
             {
                 var userId = _userManager.GetUserId(User);
-                if (await _movieService.DeleteMovie(userId, id))
+                if (userId == null)
+                    return View("Error", "User not defined");
+                if (await _movieService.DeleteMovie((int) userId, id))
                     return RedirectToAction("Index");
                 else
                     return View("Error", "Didn't manage to delete the movie");

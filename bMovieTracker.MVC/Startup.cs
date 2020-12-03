@@ -6,8 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using bMovieTracker.Data.Configuration;
 using bMovieTracker.App.Configuration;
-using AutoMapper;
-using bMovieTracker.App;
 using bMovieTracker.Identity.Configuration;
 
 namespace bMovieTracker.MVC
@@ -29,14 +27,11 @@ namespace bMovieTracker.MVC
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.ConfigureMovieTrackerIdentity(Configuration.GetConnectionString("usersDB"));
+            services.ConfigureMovieTrackerIdentityForMvc(Configuration.GetConnectionString("usersDB"));
             services.ConfigureMovieTrackerData(Configuration.GetConnectionString("moviesDB"));
-            services.AddAutoMapper(typeof(MovieMappingProfile));
-            services.AddTransient<IMovieTrackerService, MovieTrackerService>();
+            services.ConfigureMovieTrackerApp();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddAuthentication();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
