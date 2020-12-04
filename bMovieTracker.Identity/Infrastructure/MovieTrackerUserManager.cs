@@ -32,14 +32,10 @@ namespace bMovieTracker.Identity
         {
         }
 
-        public new int? GetUserId(ClaimsPrincipal principal)
+        public virtual int? GetUserIdInt(ClaimsPrincipal principal)
         {
-            if (principal == null)
-            {
-                throw new ArgumentNullException(nameof(principal));
-            }
-            var claimId = principal.FindFirstValue(Options.ClaimsIdentity.UserIdClaimType);
-            if (claimId != null && int.TryParse(claimId, out int id))
+            var idStr = base.GetUserId(principal);
+            if (idStr != null && int.TryParse(idStr, out int id))
                 return id;
             return null;
         }

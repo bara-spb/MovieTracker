@@ -49,11 +49,11 @@ namespace bMovieTracker.Api.Controllers
                 return BadRequest("Please, specify username and password");
 
             var user = await _userManager.FindByNameAsync(username);
-            if (user != null && _userManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, password) != PasswordVerificationResult.Failed)
+            if (user != null && await _userManager.CheckPasswordAsync(user, password))
             {
-                return new JsonResult(CreateToken(user));
+                return Ok(CreateToken(user));
             }
-            return StatusCode(StatusCodes.Status401Unauthorized, new { message = "No account with this username/password combination was found" });
+            return Unauthorized("No account with this username/password combination was found");
             }
 
         /// <summary>
@@ -92,9 +92,10 @@ namespace bMovieTracker.Api.Controllers
             var registrationResult = await _userManager.CreateAsync(newUser, password);
             if (registrationResult.Succeeded)
             {
-                return new JsonResult(CreateToken(newUser));
+                return Ok(CreateToken(newUser));
             }
-            return BadRequest(registrationResult.Errors.FirstOrDefault()?.Description);
+
+            return StatusCode(StatusCodes.Status500InternalServerError, registrationResult.Errors.FirstOrDefault()?.Description);
         }
 
         private object CreateToken(MovieTrackerUser user)

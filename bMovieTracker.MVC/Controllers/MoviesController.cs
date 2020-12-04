@@ -12,12 +12,10 @@ namespace bMovieTracker.MVC.Controllers
     public class MoviesController : Controller
     {
         private readonly IMovieTrackerService _movieService;
-        private readonly IMapper _mapper;
         private readonly MovieTrackerUserManager _userManager;
         public MoviesController(IMovieTrackerService movieService, IMapper mapper, MovieTrackerUserManager userManager)
         {
             _movieService = movieService;
-            _mapper = mapper;
             _userManager = userManager;
         }
 
@@ -25,7 +23,7 @@ namespace bMovieTracker.MVC.Controllers
         {
             try
             {
-                var userId = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserIdInt(User);
                 if (userId == null)
                     return View("Error", "User not defined");
                 var movies = await _movieService.GetAllMovies((int) userId);
@@ -50,7 +48,7 @@ namespace bMovieTracker.MVC.Controllers
             {
                 if (movieVM != null)
                 {
-                    var userId = _userManager.GetUserId(User);
+                    var userId = _userManager.GetUserIdInt(User);
                     if (userId == null)
                         return View("Error", "User not defined");
                     await _movieService.CreateMovie((int) userId, movieVM);
@@ -78,7 +76,7 @@ namespace bMovieTracker.MVC.Controllers
             {
                 if (movieVM != null)
                 {
-                    var userId = _userManager.GetUserId(User);
+                    var userId = _userManager.GetUserIdInt(User);
                     if (userId == null)
                         return View("Error", "User not defined");
                     if (await _movieService.UpdateMovie((int) userId, movieVM))
@@ -96,7 +94,7 @@ namespace bMovieTracker.MVC.Controllers
         {
             try
             {
-                var userId = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserIdInt(User);
                 if (userId == null)
                     return View("Error", "User not defined");
                 if (await _movieService.DeleteMovie((int) userId, id))

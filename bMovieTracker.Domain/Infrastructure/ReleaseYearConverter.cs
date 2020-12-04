@@ -8,7 +8,7 @@ namespace bMovieTracker.Domain
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            return sourceType == typeof(int) || sourceType == typeof(int?) || sourceType == typeof(string) || sourceType == typeof(object);
+            return sourceType == typeof(int) || sourceType == typeof(int?) || sourceType == typeof(string) || sourceType == typeof(object) || sourceType == typeof(long);
         }
 
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)

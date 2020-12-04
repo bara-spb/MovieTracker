@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using bMovieTracker.App;
 using bMovieTracker.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace bMovieTracker.Api.Controllers
 {
@@ -17,13 +15,11 @@ namespace bMovieTracker.Api.Controllers
     public class MoviesController : ControllerBase
     {
         private IMovieTrackerService _movieService;
-        private readonly IMapper _mapper;
         private readonly MovieTrackerUserManager _userManager;
 
-        public MoviesController(IMovieTrackerService movieService, IMapper mapper, MovieTrackerUserManager userManager)
+        public MoviesController(IMovieTrackerService movieService, MovieTrackerUserManager userManager)
         {
             _movieService = movieService;
-            _mapper = mapper;
             _userManager = userManager;
         }
 
@@ -42,12 +38,11 @@ namespace bMovieTracker.Api.Controllers
         {
             try
             {
-                var userId = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserIdInt(User);
                 if(userId == null)
                     return StatusCode(StatusCodes.Status500InternalServerError, "User not defined");
                 var movies = await _movieService.GetAllMovies((int) userId);
-                var result = JsonConvert.SerializeObject(movies);
-                return new ObjectResult(result);
+                return Ok(movies);
             }
             catch (Exception ex)
             {
@@ -69,12 +64,11 @@ namespace bMovieTracker.Api.Controllers
         {
             try
             {
-                var userId = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserIdInt(User);
                 if (userId == null)
                     return StatusCode(StatusCodes.Status500InternalServerError, "User not defined");
                 var movie = await _movieService.GetMovieById((int) userId, id);
-                var result = JsonConvert.SerializeObject(movie);
-                return new ObjectResult(result);
+                return Ok(movie);
             }
             catch (Exception ex)
             {
@@ -89,6 +83,7 @@ namespace bMovieTracker.Api.Controllers
         /// Creates new movie
         /// </remarks>
         /// <response code="201">Created movie in JSON format</response>
+        /// <response code="400">Model can't be empty</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="500">Internal server error</response>
         [HttpPost]
@@ -99,9 +94,9 @@ namespace bMovieTracker.Api.Controllers
             try
             {
                 if (movieVM == null)
-                    return BadRequest();
+                    return BadRequest("Model can't be empty");
 
-                var userId = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserIdInt(User);
                 if (userId == null)
                     return StatusCode(StatusCodes.Status500InternalServerError, "User not defined");
 
@@ -121,6 +116,7 @@ namespace bMovieTracker.Api.Controllers
         /// Update movie
         /// </summary>
         /// <response code="200">Updated movie in JSON format</response>
+        /// <response code="400">Model can't be empty</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="500">Internal server error</response>
         [HttpPut("{id}")]
@@ -129,9 +125,9 @@ namespace bMovieTracker.Api.Controllers
             try
             {
                 if (movieVM == null)
-                    return BadRequest();
+                    return BadRequest("Model can't be empty");
 
-                var userId = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserIdInt(User);
                 if (userId == null)
                     return StatusCode(StatusCodes.Status500InternalServerError, "User not defined");
 
@@ -155,18 +151,19 @@ namespace bMovieTracker.Api.Controllers
         /// </summary>
         /// <response code="200">Movie deleted</response>
         /// <response code="401">Unauthorized</response>
+        /// <response code="404">Movie is not found</response>
         /// <response code="500">Internal server error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var userId = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserIdInt(User);
                 if (userId == null)
                     return StatusCode(StatusCodes.Status500InternalServerError, "User not defined");
 
                 if (await _movieService.GetMovieById((int) userId, id) == null)
-                    return NotFound();
+                    return NotFound("Movie is not found");
 
                 if (await _movieService.DeleteMovie((int) userId, id))
                     return Ok("Movie deleted");
